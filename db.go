@@ -1,4 +1,4 @@
-package gom
+package oram
 
 import (
 	"bytes"
