@@ -1,3 +1,3 @@
-module github.com/gkyh/gom
+module github.com/gkyh/oram
 
 go 1.16
