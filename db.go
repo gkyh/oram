@@ -958,7 +958,7 @@ func (db *ConDB) Query() (map[string]string, error) {
 		sqlStr.WriteString(db.group)
 	}
 
-	sqlStr.WriteString(" rownum <=1")
+	sqlStr.WriteString(" and rownum <=1")
 
 	db.trace(sqlStr.String(), db.params...)
 
@@ -1032,7 +1032,7 @@ func (db *ConDB) SelectInt(field string) int64 {
 
 	db_sql.WriteString(db.buildSql())
 
-	db_sql.WriteString(" rownum =1")
+	db_sql.WriteString(" and rownum =1")
 
 	db.trace(db_sql.String(), db.params...)
 
@@ -1050,7 +1050,7 @@ func (db *ConDB) SelectStr(field string) string {
 
 	db_sql.WriteString(db.buildSql())
 
-	db_sql.WriteString(" rownum =1")
+	db_sql.WriteString(" and rownum =1")
 
 	db.trace(db_sql.String(), db.params...)
 
@@ -1101,7 +1101,7 @@ func (db *ConDB) IsExit() (bool, error) {
 	db_sql.WriteString(db.table)
 
 	db_sql.WriteString(db.buildSql())
-	db_sql.WriteString("  rownum =1")
+	db_sql.WriteString(" and rownum =1")
 
 	db.trace(db_sql.String(), db.params...)
 
