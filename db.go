@@ -951,14 +951,18 @@ func (db *ConDB) Query() (map[string]string, error) {
 	sqlStr.WriteString(" FROM ")
 	sqlStr.WriteString(db.table)
 
-	sqlStr.WriteString(db.buildSql())
+	sql := db.buildSql()
+	sqlStr.WriteString(sql)
 
 	if db.group != "" {
 
 		sqlStr.WriteString(db.group)
 	}
-
-	sqlStr.WriteString(" and rownum <=1")
+	if sql != "" {
+		sqlStr.WriteString(" and rownum <=1")
+	} else {
+		sqlStr.WriteString("  rownum <=1")
+	}
 
 	db.trace(sqlStr.String(), db.params...)
 
@@ -1030,9 +1034,14 @@ func (db *ConDB) SelectInt(field string) int64 {
 	db_sql.WriteString(" FROM ")
 	db_sql.WriteString(db.table)
 
-	db_sql.WriteString(db.buildSql())
+	sql := db.buildSql()
+	db_sql.WriteString(sql)
 
-	db_sql.WriteString(" and rownum =1")
+	if sql != "" {
+		db_sql.WriteString(" and rownum <=1")
+	} else {
+		db_sql.WriteString("  rownum <=1")
+	}
 
 	db.trace(db_sql.String(), db.params...)
 
@@ -1048,9 +1057,14 @@ func (db *ConDB) SelectStr(field string) string {
 	db_sql.WriteString(" FROM ")
 	db_sql.WriteString(db.table)
 
-	db_sql.WriteString(db.buildSql())
+	sql := db.buildSql()
+	db_sql.WriteString(sql)
 
-	db_sql.WriteString(" and rownum =1")
+	if sql != "" {
+		db_sql.WriteString(" and rownum <=1")
+	} else {
+		db_sql.WriteString("  rownum <=1")
+	}
 
 	db.trace(db_sql.String(), db.params...)
 
@@ -1100,8 +1114,14 @@ func (db *ConDB) IsExit() (bool, error) {
 	db_sql.WriteString("SELECT 1  FROM ")
 	db_sql.WriteString(db.table)
 
-	db_sql.WriteString(db.buildSql())
-	db_sql.WriteString(" and rownum =1")
+	sql := db.buildSql()
+	db_sql.WriteString(sql)
+
+	if sql != "" {
+		db_sql.WriteString(" and rownum =1")
+	} else {
+		db_sql.WriteString("  rownum =1")
+	}
 
 	db.trace(db_sql.String(), db.params...)
 
@@ -1162,14 +1182,19 @@ func (db *ConDB) Get(out interface{}) error {
 	sqlStr.WriteString(" FROM ")
 	sqlStr.WriteString(db.table)
 
-	sqlStr.WriteString(db.buildSql())
+	sql := db.buildSql()
+	sqlStr.WriteString(sql)
 
 	if db.group != "" {
 
 		sqlStr.WriteString(db.group)
 	}
 
-	sqlStr.WriteString(" and rownum =1")
+	if sql != "" {
+		sqlStr.WriteString(" and rownum =1")
+	} else {
+		sqlStr.WriteString("  rownum =1")
+	}
 
 	db.trace(sqlStr.String(), db.params...)
 
