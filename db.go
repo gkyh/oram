@@ -34,6 +34,7 @@ type SqlExecutor interface {
 	Delete(i ...interface{}) error
 	Insert(i interface{}) error
 	SelectInt(field string) int64
+	SumInt(field string) int64
 	SelectStr(field string) string
 	QueryField(field string, out interface{}) error
 	Field(field string) *ConDB
@@ -1042,6 +1043,24 @@ func (db *ConDB) SelectInt(field string) int64 {
 	} else {
 		db_sql.WriteString("  rownum <=1")
 	}
+
+	db.trace(db_sql.String(), db.params...)
+
+	db.Err = db.Db.QueryRow(db_sql.String(), db.params...).Scan(&out)
+	return out
+}
+
+func (db *ConDB) SumInt(field string) int64 {
+
+	var out int64
+	db_sql := bytes.Buffer{}
+	db_sql.WriteString("SELECT ")
+	db_sql.WriteString(field)
+	db_sql.WriteString(" FROM ")
+	db_sql.WriteString(db.table)
+
+	sql := db.buildSql()
+	db_sql.WriteString(sql)
 
 	db.trace(db_sql.String(), db.params...)
 
